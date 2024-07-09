@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/cart_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Giỏ hàng"
+        android:src="@drawable/cart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/cart_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/badge_background"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="0"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/cart_icon"
+        app:layout_constraintTop_toTopOf="@id/cart_icon"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content">-->
+    <!--    <ImageView-->
+    <!--        -->
+    <!--        android:id="@+id/cart_icon"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:src="@drawable/cart"-->
+    <!--        android:contentDescription="Giỏ hàng" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/cart_badge"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:background="@drawable/badge_background"-->
+    <!--        android:textColor="@android:color/white"-->
+    <!--        android:gravity="center"-->
+    <!--        android:padding="2dp"-->
+    <!--        android:textSize="12sp"-->
+    <!--        android:visibility="gone"/>-->
+    <!--</RelativeLayout>-->

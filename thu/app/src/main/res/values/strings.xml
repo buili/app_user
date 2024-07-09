@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">app user</string>
+    <string name="dang">Đăng Nhập</string>
+    <string name="email">Email</string>
+    <string name="pass">PassWord</string>
+    <string name="sanphambanchay">Sản phẩm bán chạy</string>
+    <string name="sanphammoi">Sản phẩm mới nhất</string>
+    <string name="trangchu_bottom">Home</string>
+    <string name="live_bottom">Live</string>
+    <string name="thongbao_bottom">Thông báo</string>
+    <string name="taikhoan_bottom">Tôi</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="8dp"
+    app:cardBackgroundColor="#ffffff"
+    app:cardCornerRadius="4dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/imageviewsp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/baseline_perm_media_24"
+            android:adjustViewBounds="true" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textviewtensp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Tên sản phẩm"
+                android:textColor="#fc0a65ba"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textviewgiasp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Giá sản phẩm"
+                android:layout_margin="5dp"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textviewmotasp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mô tả điện thoại"
+                android:layout_margin="5dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.cardview.widget.CardView>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"-->
+
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content">-->
+
+<!--    <androidx.cardview.widget.CardView-->
+
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:elevation="8dp"-->
+<!--        app:cardBackgroundColor="#ffffff"-->
+<!--        app:cardCornerRadius="4dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:weightSum="10">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imageviewsp"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:layout_weight="3"-->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:src="@drawable/noanh">-->
+
+<!--            </ImageView>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="7"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textviewtensp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="Tên sản phẩm"-->
+<!--                    android:textColor="#fc0a65ba"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold">-->
+
+<!--                </TextView>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textviewgiasp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="Giá sản phẩm"-->
+<!--                    android:textColor="#ec0609"-->
+<!--                    android:textSize="18sp">-->
+
+<!--                </TextView>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textviewmotasp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="Mô tả điện thoại"-->
+<!--                    android:textSize="18sp">-->
+
+<!--                </TextView>-->
+<!--            </LinearLayout>-->
+
+<!--        </LinearLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+<!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+    <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:elevation="8dp"-->
+<!--        app:cardBackgroundColor="#ffffff"-->
+<!--        app:cardCornerRadius="4dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:weightSum="10">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imageviewsp1"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:layout_weight="3"-->
+<!--                -->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:src="@drawable/baseline_perm_media_24" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="7"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textviewtensp1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="Tên sản phẩm"-->
+<!--                    android:textColor="#fc0a65ba"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textviewgiasp1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="Giá sản phẩm"-->
+<!--                    android:textColor="@android:color/holo_red_light"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textviewmotasp1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:text="Mô tả điện thoại"-->
+<!--                    android:textSize="20sp" />-->
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
