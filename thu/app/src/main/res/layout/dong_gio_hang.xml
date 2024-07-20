@@ -12,12 +12,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="10">
-        <CheckBox
-            android:id="@+id/checkbox"
+        <LinearLayout
             android:layout_gravity="center"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/txthethang"
+                android:visibility="gone"
+                android:text="Hết hàng"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
         <ImageView
             android:adjustViewBounds="true"
             android:id="@+id/imgspgiohang"

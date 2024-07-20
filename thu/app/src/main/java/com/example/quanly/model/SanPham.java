@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class SanPham implements Serializable {
     private int id;
-    String ten;
-    int gia;
-    String hinhanh;
-    String mota;
-    int idloai;
+    private String ten;
+    private int gia;
+    private String hinhanh;
+    private String mota;
+    private int idloai;
 
-    int sltonkho;
+    private int sltonkho;
 
     public SanPham(int id, String ten, int gia, String hinhanh, String mota, int idloai, int sltonkho) {
         this.id = id;

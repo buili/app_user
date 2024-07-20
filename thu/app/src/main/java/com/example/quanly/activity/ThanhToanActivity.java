@@ -91,8 +91,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                 }else if(TextUtils.isEmpty(str_diachi)){
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
                 }else{
-                    int iduuser;
-                    iduuser = Utils.user_current.getId();
+                    int iduuser = Utils.user_current.getId();
 
                     Log.d("test", new Gson().toJson(Utils.mangmuahang));
                     compositeDisposable.add(apiBanHang.themdonhang(iduuser, str_sdt, str_email, str_diachi, soluong, tongiten, new Gson().toJson(Utils.mangmuahang))
@@ -106,7 +105,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                                                 xoagiohang(iduuser, Utils.mangmuahang.get(i).getIdsp());
                                             }
 
-                                             Utils.manggiohang.clear();
+                                            Utils.mangmuahang.clear();
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(intent);
                                             finish();
@@ -150,7 +149,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                                                 xoagiohang(iduuser, Utils.mangmuahang.get(i).getIdsp());
                                             }
 
-                                            Utils.manggiohang.clear();
+                                            Utils.mangmuahang.clear();
                                             iddonhang = messageModel.getIddonhang();
                                             requestZalo();
 //                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);

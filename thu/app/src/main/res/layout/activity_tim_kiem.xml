@@ -5,30 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.TimKiemActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbartimkiem"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/toolbar"
-        app:title="Tìm kiếm"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Tìm kiếm" />
+
     <EditText
         android:id="@+id/edttimkiem"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbartimkiem"
-        android:hint="Nhập tên sản phẩm cần tìm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
+        android:hint="Nhập tên sản phẩm cần tìm"
+        app:layout_constraintTop_toBottomOf="@+id/toolbartimkiem" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewtimkiem"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edttimkiem"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="180dp" />
+    <TextView
+        android:id="@+id/txttimkiem"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:text="Không tìm thấy sản phẩm phù hợp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerviewtimkiem"
-        app:layout_constraintTop_toBottomOf="@+id/edttimkiem"
-        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_height="0dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/edttimkiem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

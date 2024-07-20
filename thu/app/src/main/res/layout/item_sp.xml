@@ -6,8 +6,8 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     app:cardCornerRadius="4dp"
-    android:layout_width="160dp"
-    android:layout_height="wrap_content">
+    android:layout_width="140dp"
+    android:layout_height="200dp">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,9 +24,14 @@
             <TextView
                 android:id="@+id/itemsp_ten"
                 android:text="Latop"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView

@@ -37,7 +37,15 @@
                 android:text="Tên sản phẩm"
                 android:textColor="#fc0a65ba"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+
+            />
 
             <TextView
                 android:id="@+id/textviewgiasp"

@@ -1,10 +1,32 @@
 package com.example.quanly.model;
 
-public class DonHang {
-    int id;
-    String sdt, email, diachi;
-    int tongtien, trangthai;
+import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+public class DonHang {
+    private int id;
+    private int iduser;
+    private String sdt, email, diachi;
+    private int tongtien, trangthai;
+
+
+    private List<Item> item;
+
+    public int getIduser() {
+        return iduser;
+    }
+
+    public void setIduser(int iduser) {
+        this.iduser = iduser;
+    }
+    public List<Item> getItemDonHangList() {
+        return item;
+    }
+
+    public void setItemDonHangList(List<Item> itemDonHangList) {
+        this.item = itemDonHangList;
+    }
 
     public int getId() {
         return id;

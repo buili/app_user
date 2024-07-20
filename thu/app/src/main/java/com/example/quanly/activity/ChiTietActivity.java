@@ -58,7 +58,6 @@ public class ChiTietActivity extends AppCompatActivity {
     }
 
 
-
     private void InitControl() {
         btnhthem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,129 +114,42 @@ public class ChiTietActivity extends AppCompatActivity {
         //boolean isNewProduct = true;
         int soluong = Integer.parseInt(spinner.getSelectedItem().toString());
 
-//        if (Utils.manggiohang.size() > 0) {
-//            for (int i = 0; i < Utils.manggiohang.size(); i++) {
-//                if (Utils.manggiohang.get(i).getIdsp() == sanPham.getId()) {
-//                    Utils.manggiohang.get(i).setSoluongsp(soluong + Utils.manggiohang.get(i).getSoluongsp());
-//                    isNewProduct = false;
-//                    Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng 2", Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//            }
-//        }
+        // Kiểm tra và thêm sản phẩm vào giỏ hàng
+        boolean isNewProduct = true;
+        if (Utils.manggiohang.size() > 0) {
+            for (int i = 0; i < Utils.manggiohang.size(); i++) {
+                if (Utils.manggiohang.get(i).getIdsp() == sanPham.getId()) {
+                    int sl_moi = soluong + Utils.manggiohang.get(i).getSoluong();
+                    Utils.manggiohang.get(i).setSoluong(sl_moi);
 
-//        compositeDisposable.add(apiBanHang.giohang(1)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        gioHangModel -> {
-//                                //gioHangAdapter = new GioHangAdapter(getApplicationContext(), gioHangModel.getResult());
-//                                manggiohang = gioHangModel.getResult();
+                    int iduser = Utils.user_current.getId();
+                    int idsp = sanPham.getId();
+                    int soluong2 = sl_moi;
+                    if (soluong2 >= sanPham.getSltonkho()) {
+                        soluong2 = sanPham.getSltonkho();
+                    }
+                    capNhatGioHang(iduser, idsp, soluong2);
+                    isNewProduct = false;
+                    //  Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+        }
 
-                            // Kiểm tra và thêm sản phẩm vào giỏ hàng
-                            boolean isNewProduct = true;
-                            if (Utils.manggiohang.size() > 0) {
-                                for (int i = 0; i < Utils.manggiohang.size(); i++) {
-                                    if (Utils.manggiohang.get(i).getIdsp() == sanPham.getId()) {
-                                        int sl_moi = soluong + Utils.manggiohang.get(i).getSoluong();
-                                        Utils.manggiohang.get(i).setSoluong(sl_moi);
+        if (isNewProduct) {
+            int iduser = Utils.user_current.getId();
+            int idsp = sanPham.getId();
+            int soluong2 = soluong;
+            if (soluong2 >= sanPham.getSltonkho()) {
+                soluong2 = sanPham.getSltonkho();
+            }
+            themGioHang(iduser, idsp, soluong2);
+        }
 
-                                        int iduser = Utils.user_current.getId();
-                                        int idsp = sanPham.getId();
-                                        int soluong2 = sl_moi;
-                                        if(soluong2 >= sanPham.getSltonkho()){
-                                            soluong2 = sanPham.getSltonkho();
-                                        }
-                                        capNhatGioHang(iduser, idsp, soluong2);
-                                        isNewProduct = false;
-                                      //  Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (isNewProduct) {
-                                int iduser = Utils.user_current.getId();
-                                int idsp = sanPham.getId();
-                                int soluong2 = soluong;
-                                if(soluong2 >= sanPham.getSltonkho()){
-                                    soluong2 = sanPham.getSltonkho();
-                                }
-                                themNhatGioHang(iduser, idsp, soluong2);
-                            }
-//                        },
-//                        throwable -> {
-//                            Log.e("Themgiohang", "Loi", throwable);
-//                            Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                )
-//        );
-
-//        if (manggiohang.size() > 0) {
-//            for (int i = 0; i < manggiohang.size(); i++) {
-//                if (manggiohang.get(i).getIdsp() == sanPham.getId()) {
-//                    manggiohang.get(i).setSoluongsp(soluong + manggiohang.get(i).getSoluongsp());
-//                    isNewProduct = false;
-//                    Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng 2", Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if (isNewProduct) {
-////            GioHang gioHang = new GioHang();
-////            gioHang.setSoluongsp(soluong);
-////            gioHang.setIdsp(sanPham.getId());
-////            gioHang.setSanPham(sanPham.getTen());
-////            gioHang.setHinhanhsp(sanPham.getHinhanh());
-////            gioHang.setGiasp(sanPham.getGia());
-////            Utils.manggiohang.add(gioHang);
-////            Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
-////            invalidateOptionsMenu(); // Only invalidate if a new product is added
-//            int iduser = 1;
-//            int idsp = sanPham.getId();
-//            int soluong2 = soluong;
-//            compositeDisposable.add(apiBanHang.themgiohang(iduser, idsp, soluong2)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(
-//                            gioHangModel -> {
-//                                if(gioHangModel.isSuccess()){
-//                                    Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
-//                                    invalidateOptionsMenu(); // Only invalidate if a new product is added
-//                                }
-//                            },
-//                            throwable -> {
-//                                Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                    )
-//            );
-//
-//
-//        }
     }
 
-   private void capNhatGioHang(int idUser, int idSp, int soluong){
-       compositeDisposable.add(apiBanHang.updategiohang(idUser, idSp, soluong)
-               .subscribeOn(Schedulers.io())
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(
-                       themGioHangModel -> {
-                           if (themGioHangModel.isSuccess()) {
-                               Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
-                               refreshCart();
-                               invalidateOptionsMenu(); // Only invalidate if a new product is added
-                           }
-                       },
-                       throwable -> {
-                           Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                       }
-               )
-       );
-   }
-
-    private void themNhatGioHang(int idUser, int idSp, int soluong){
-        compositeDisposable.add(apiBanHang.themgiohang(idUser, idSp, soluong)
+    private void capNhatGioHang(int idUser, int idSp, int soluong) {
+        compositeDisposable.add(apiBanHang.updategiohang(idUser, idSp, soluong)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -245,7 +157,7 @@ public class ChiTietActivity extends AppCompatActivity {
                             if (themGioHangModel.isSuccess()) {
                                 Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
                                 refreshCart();
-                                invalidateOptionsMenu(); // Only invalidate if a new product is added
+                                invalidateOptionsMenu();
                             }
                         },
                         throwable -> {
@@ -254,6 +166,26 @@ public class ChiTietActivity extends AppCompatActivity {
                 )
         );
     }
+
+    private void themGioHang(int idUser, int idSp, int soluong) {
+        compositeDisposable.add(apiBanHang.themgiohang(idUser, idSp, soluong)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        themGioHangModel -> {
+                            if (themGioHangModel.isSuccess()) {
+                                Toast.makeText(getApplicationContext(), "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                                refreshCart();
+                                invalidateOptionsMenu();
+                            }
+                        },
+                        throwable -> {
+                            Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                )
+        );
+    }
+
     private void InitData() {
         sanPham = (SanPham) getIntent().getSerializableExtra("chitiet");
         tensp.setText(sanPham.getTen());
@@ -265,38 +197,39 @@ public class ChiTietActivity extends AppCompatActivity {
 //                .error(R.drawable.error)
 //                .into(imghinhanh);
 
-        if(sanPham.getHinhanh().contains("https")){
+        if (sanPham.getHinhanh().contains("https")) {
             Glide.with(getApplicationContext())
                     .load(sanPham.getHinhanh())
                     .placeholder(R.drawable.noanh)
                     .error(R.drawable.error)
                     .into(imghinhanh);
-        }else{
+        } else {
             String hinh = Utils.BASE_URL + "images/" + sanPham.getHinhanh();
             Glide.with(getApplicationContext()).load(hinh)
                     .placeholder(R.drawable.noanh)
                     .error(R.drawable.error)
                     .into(imghinhanh);
         }
-      //  Integer[] so = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        List<Integer> so = new ArrayList<>();
-        for (int i = 1; i < sanPham.getSltonkho()+1; i++) {
-            so.add(i);
+        //  Integer[] so = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        if (sanPham.getSltonkho() > 0) {
+            List<Integer> so = new ArrayList<>();
+            for (int i = 1; i < sanPham.getSltonkho() + 1; i++) {
+                so.add(i);
+            }
+            ArrayAdapter<Integer> adapterspinner = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, so);
+            spinner.setAdapter(adapterspinner);
+        } else {
+//            List<String> str = new ArrayList<>();
+//            str.add("Hết hàng");
+            String[] str = {"Hết hàng"};
+            ArrayAdapter<String> adapterspinner = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, str);
+            spinner.setAdapter(adapterspinner);
+            btnhthem.setEnabled(false);
+            btnhthem.setAlpha(0.0f);
         }
-        ArrayAdapter<Integer> adapterspinner = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, so);
-        spinner.setAdapter(adapterspinner);
     }
 
-//    private void ActionBar() {
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//    }
+
 
     private void ActionBar() {
         Chung.ActionToolBar(this, toolbar);

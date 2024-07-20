@@ -100,6 +100,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tensp = itemView.findViewById(R.id.textviewtensp);
+            tensp.setSelected(true);
             giasp = itemView.findViewById(R.id.textviewgiasp);
             mota = itemView.findViewById(R.id.textviewmotasp);
             hinhanh = itemView.findViewById(R.id.imageviewsp);

@@ -96,7 +96,7 @@ public class DangNhapActivity extends AppCompatActivity {
                     if (firebaseUser != null) {
                         DangNhap(str_email, str_pass);
                     } else {
-                        
+
                         firebaseAuth.signInWithEmailAndPassword(str_email, str_pass)
                                 .addOnCompleteListener(DangNhapActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override

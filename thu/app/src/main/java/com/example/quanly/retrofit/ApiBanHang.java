@@ -120,4 +120,23 @@ public interface ApiBanHang {
             @Field("id") int id,
             @Field("token") String token
     );
+
+    @POST("donhang.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> donhang(
+      @Field("iduser") int id
+    );
+
+    @POST("donhangtheotrangthai.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> donhangtheotrangthai(
+            @Field("iduser") int id,
+            @Field("trangthai") int tranthai
+    );
+
+    @POST("xoadonhang.php")
+    @FormUrlEncoded
+    Observable<MessageModel> xodonhang(
+        @Field("iddonhang") int id
+    );
 }

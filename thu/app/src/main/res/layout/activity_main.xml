@@ -4,194 +4,208 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarmain"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbar"
+        app:title="Trang Chính"/>
 
-
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerlayoutmain"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.core.widget.NestedScrollView
+
+
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawerlayoutmain"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarmain"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/toolbar"
-                app:title="Trang Chính" />
-            <androidx.cardview.widget.CardView
-                android:layout_margin="5dp"
-                app:cardCornerRadius="5dp"
-                android:elevation="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="160dp">
-                <com.denzcoskun.imageslider.ImageSlider
-                    android:id="@+id/image_slider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="160dp"
-                    app:iss_auto_cycle="true"
-                    app:iss_period="1000"
-                    app:iss_delay="2000"
-                    app:iss_text_align="CENTER"
-                   />
+                android:layout_height="match_parent">
 
-            </androidx.cardview.widget.CardView>
-
-            <LinearLayout
-                android:background="@color/toolbar"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-                <TextView
-                    android:text="@string/sanphambanchay"
-                    android:textColor="@color/red"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_banchay"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-            <LinearLayout
-                android:paddingTop="10dp"
-                android:padding="5dp"
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_margin="5dp"
+                        android:elevation="8dp"
+                        app:cardCornerRadius="5dp">
+
+                        <com.denzcoskun.imageslider.ImageSlider
+                            android:id="@+id/image_slider"
+                            android:layout_width="wrap_content"
+                            android:layout_height="160dp"
+                            app:iss_auto_cycle="true"
+                            app:iss_delay="2000"
+                            app:iss_period="1000"
+                            app:iss_text_align="CENTER" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sanphambanchay"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerview_banchay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:background="@color/ngan" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="5dp"
+                        android:paddingTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sanphammoi"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleviewmain"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navigationview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/toolbar"
-                android:orientation="vertical">
+                android:layout_gravity="start">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sanphammoi"
-                    android:textColor="@color/red"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleviewmain"
+                <ListView
+                    android:id="@+id/listviewmain"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.navigation.NavigationView>
 
-                </androidx.recyclerview.widget.RecyclerView>
-            </LinearLayout>
-        </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigationview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start">
-            <ListView
-                android:id="@+id/listviewmain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.navigation.NavigationView>
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-
+        </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
+    <!--<ViewFlipper-->
+    <!--android:id="@+id/viewflipper"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="200dp" />-->
 
-<!--<ViewFlipper-->
-<!--android:id="@+id/viewflipper"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="200dp" />-->
+    <!--    <?xml version="1.0" encoding="utf-8"?>-->
+    <!--<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context=".activity.MainActivity">-->
 
-<!--    <?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--xmlns:tools="http://schemas.android.com/tools"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent"-->
-<!--tools:context=".activity.MainActivity">-->
-
-<!--<androidx.drawerlayout.widget.DrawerLayout-->
-<!--    android:id="@+id/drawerlayoutmain"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent">-->
-
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical">-->
-
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbarmain"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="?attr/actionBarSize"-->
-<!--            android:background="@color/toolbar"-->
-<!--            app:title="Trang Chính" />-->
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:layout_margin="5dp"-->
-<!--            app:cardCornerRadius="5dp"-->
-<!--            android:elevation="8dp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="160dp">-->
-<!--            <com.denzcoskun.imageslider.ImageSlider-->
-<!--                android:id="@+id/image_slider"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="160dp"-->
-<!--                app:iss_auto_cycle="true"-->
-<!--                app:iss_period="1000"-->
-<!--                app:iss_delay="2000"-->
-<!--                app:iss_text_align="CENTER"-->
-<!--                />-->
-
-<!--        </androidx.cardview.widget.CardView>-->
+    <!--<androidx.drawerlayout.widget.DrawerLayout-->
+    <!--    android:id="@+id/drawerlayoutmain"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent">-->
 
 
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical">-->
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:background="@color/toolbar"-->
-<!--            android:orientation="vertical">-->
+    <!--        <androidx.appcompat.widget.Toolbar-->
+    <!--            android:id="@+id/toolbarmain"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="?attr/actionBarSize"-->
+    <!--            android:background="@color/toolbar"-->
+    <!--            app:title="Trang Chính" />-->
+    <!--        <androidx.cardview.widget.CardView-->
+    <!--            android:layout_margin="5dp"-->
+    <!--            app:cardCornerRadius="5dp"-->
+    <!--            android:elevation="8dp"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="160dp">-->
+    <!--            <com.denzcoskun.imageslider.ImageSlider-->
+    <!--                android:id="@+id/image_slider"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="160dp"-->
+    <!--                app:iss_auto_cycle="true"-->
+    <!--                app:iss_period="1000"-->
+    <!--                app:iss_delay="2000"-->
+    <!--                app:iss_text_align="CENTER"-->
+    <!--                />-->
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/sanphammoi"-->
-<!--                android:textColor="@color/red"-->
-<!--                android:textSize="20sp"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recycleviewmain"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content">-->
-
-<!--            </androidx.recyclerview.widget.RecyclerView>-->
-<!--        </LinearLayout>-->
-<!--    </LinearLayout>-->
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/navigationview"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start">-->
-<!--        <ListView-->
-<!--            android:id="@+id/listviewmain"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"/>-->
-<!--    </com.google.android.material.navigation.NavigationView>-->
-
-<!--</androidx.drawerlayout.widget.DrawerLayout>-->
+    <!--        </androidx.cardview.widget.CardView>-->
 
 
-<!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:background="@color/toolbar"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <TextView-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="@string/sanphammoi"-->
+    <!--                android:textColor="@color/red"-->
+    <!--                android:textSize="20sp"-->
+    <!--                android:textStyle="bold" />-->
+
+    <!--            <androidx.recyclerview.widget.RecyclerView-->
+    <!--                android:id="@+id/recycleviewmain"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content">-->
+
+    <!--            </androidx.recyclerview.widget.RecyclerView>-->
+    <!--        </LinearLayout>-->
+    <!--    </LinearLayout>-->
+    <!--    <com.google.android.material.navigation.NavigationView-->
+    <!--        android:id="@+id/navigationview"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_gravity="start">-->
+    <!--        <ListView-->
+    <!--            android:id="@+id/listviewmain"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"/>-->
+    <!--    </com.google.android.material.navigation.NavigationView>-->
+
+    <!--</androidx.drawerlayout.widget.DrawerLayout>-->
+
+
+    <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
 

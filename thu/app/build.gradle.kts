@@ -47,7 +47,8 @@ dependencies {
     )))
 
 
-    // implementation ("com.picasso")
+
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -83,4 +84,6 @@ dependencies {
     //image slide
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
+    //load
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

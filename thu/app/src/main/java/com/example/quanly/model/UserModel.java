@@ -3,9 +3,9 @@ package com.example.quanly.model;
 import java.util.List;
 
 public class UserModel {
-    boolean success;
-    String message;
-    List<User> result;
+    private boolean success;
+    private String message;
+    private List<User> result;
 
     public boolean isSuccess() {
         return success;

@@ -1,12 +1,19 @@
 package com.example.quanly.model;
 
 public class User {
-    int id;
-    String email;
-    String pass;
+    private int id;
+    private String email;
+    private String pass;
 
-    String username;
-    String mobile;
+    private  String username;
+    private  String mobile;
+
+    public User() {
+    }
+
+    public User(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;

@@ -1,16 +1,16 @@
 package com.example.quanly.model;
 
 public class GioHang {
-    int id;
-    int iduser;
+    private int id;
+    private int iduser;
     private int idsp;
     //     String tensp;
 //     long giasp;
 //     String hinhanhsp;
-    int soluong;
+    private int soluong;
 
 
-    SanPham sanPham;
+    private SanPham sanPham;
 
     public GioHang() {
     }

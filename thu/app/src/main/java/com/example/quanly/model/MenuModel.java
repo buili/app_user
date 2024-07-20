@@ -3,9 +3,9 @@ package com.example.quanly.model;
 import java.util.List;
 
 public class MenuModel {
-    boolean success;
-    String message;
-    List<Menu_1> result;
+    private boolean success;
+    private String message;
+    private List<Menu_1> result;
 
     public boolean isSuccess() {
         return success;

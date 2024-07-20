@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ public class GioHangActivity extends AppCompatActivity {
     ApiBanHang apiBanHang;
     LinearLayoutManager linearLayoutManager;
 
-    long tongTienSpMua;
+    long tongTienSpMua = 0;
 
     MenuItem menuSua;
 
@@ -58,55 +59,48 @@ public class GioHangActivity extends AppCompatActivity {
         InitControl();
 
         tinhTongTien();
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (adapter != null) {
-                adapter.selectAll(isChecked); // Call the selectAll method on the adapter instance
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (adapter != null) {
+                    adapter.selectAll(isChecked);
+                }
             }
         });
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        Chung.createMenu(this, menu);
         MenuItem menuGioHang = menu.findItem(R.id.menugiohang);
         menuSua = menu.findItem(R.id.menusua);
         menuGioHang.setVisible(false);
         menuSua.setVisible(true);
-        return super.onCreateOptionsMenu(menu);
+        return true;
+
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if(item.getItemId() == R.id.menusua){
-
-            if(Utils.mangmuahang.size() > 0){
+        if (item.getItemId() == R.id.menusua) {
+            if (Utils.mangmuahang.size() > 0) {
                 int iduuser = Utils.user_current.getId();
-                for(int i = 0; i < Utils.mangmuahang.size(); i++){
+                for (int i = 0; i < Utils.mangmuahang.size(); i++) {
                     xoasp(iduuser, Utils.mangmuahang.get(i).getIdsp());
                 }
-
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "Vui lòng chọn ít nhất một sản phẩm", Toast.LENGTH_SHORT).show();
             }
-
             return true;
         }
-        if(item.getItemId() == R.id.menutimkiem){
-            Intent intent = new Intent(getApplicationContext(), TimKiemActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        if (item.getItemId() == R.id.image_mess) {
-            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        Chung.itemMenuSelected(this, item);
         return super.onOptionsItemSelected(item);
     }
 
-    private void xoasp (int idUser, int idSp) {
+    private void xoasp(int idUser, int idSp) {
         compositeDisposable.add(apiBanHang.xoaspgiohang(idUser, idSp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,10 +119,9 @@ public class GioHangActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        // Cập nhật lại RecyclerView và các thành phần khác khi giỏ hàng thay đổi
         if (Utils.manggiohang.size() == 0) {
             giohangtrong.setVisibility(View.VISIBLE);
-            btnmuahang.setVisibility(View.INVISIBLE);
+            //btnmuahang.setVisibility(View.INVISIBLE);
         } else {
             giohangtrong.setVisibility(View.GONE);
             btnmuahang.setVisibility(View.VISIBLE);
@@ -136,9 +129,10 @@ public class GioHangActivity extends AppCompatActivity {
         }
         tinhTongTien();
     }
+
     private void tinhTongTien() {
         tongTienSpMua = 0;
-        for(int i = 0; i < Utils.mangmuahang.size(); i++){
+        for (int i = 0; i < Utils.mangmuahang.size(); i++) {
             tongTienSpMua += Utils.mangmuahang.get(i).getSanPham().getGia() * Utils.mangmuahang.get(i).getSoluong();
         }
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
@@ -146,10 +140,10 @@ public class GioHangActivity extends AppCompatActivity {
     }
 
     private void InitControl() {
-        if(Utils.manggiohang.size() == 0){
+        if (Utils.manggiohang.size() == 0) {
             giohangtrong.setVisibility(View.VISIBLE);
             //btnmuahang.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             adapter = new GioHangAdapter(getApplicationContext(), Utils.manggiohang);
             recyclerView.setAdapter(adapter);
         }
@@ -158,9 +152,9 @@ public class GioHangActivity extends AppCompatActivity {
         btnmuahang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Utils.mangmuahang.size() == 0){
+                if (Utils.mangmuahang.size() == 0) {
                     Toast.makeText(getApplicationContext(), "Vui lòng chọn ít nhất một sản phẩm", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
                     intent.putExtra("tongtien", tongTienSpMua);
                     Utils.manggiohang.clear();
@@ -170,81 +164,8 @@ public class GioHangActivity extends AppCompatActivity {
         });
 
 
-
-//        int iduser = Utils.user_current.getId();
-//        Log.e("GioHang", "idusser"+ iduser);
-//        compositeDisposable.add(apiBanHang.giohang(iduser)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        gioHangModel -> {
-//                            if(gioHangModel.isSuccess()){
-//                                adapter = new GioHangAdapter(getApplicationContext(), gioHangModel.getResult());
-//                                recyclerView.setAdapter(adapter);
-//                            }
-//                        },
-//                        throwable -> {
-//
-//                            Log.e("GioHang", "Loi", throwable);
-//                            Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                )
-//        );
-
-
-//        compositeDisposable.add(apiBanHang.giohang(1)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        gioHangModel -> {
-//                            if (gioHangModel.isSuccess()) {
-//                                List<GioHang> gioHangList = gioHangModel.getResult();
-//                                if (gioHangList == null || gioHangList.isEmpty()) {
-//                                    Toast.makeText(getApplicationContext(), "Giỏ hàng rỗng", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    for (GioHang gioHang : gioHangList) {
-//                                        // Tạo đối tượng SanPham từ dữ liệu JSON
-//                                        SanPham sanPham = gioHang.getSanPham();
-//                                        if (sanPham == null) {
-//                                            // Xử lý trường hợp sanPham là null
-//                                            Log.e("GioHang", "SanPham is null in GioHang with id: " + gioHang.getIdsp());
-//                                            continue; // Bỏ qua mục giỏ hàng này nếu sanPham là null
-//                                        }
-//                                        SanPham sanPhamData = new SanPham();
-//                                        sanPhamData.setTen(sanPham.getTen());
-//                                        sanPhamData.setHinhanh(sanPham.getHinhanh());
-//                                        sanPhamData.setGia(sanPham.getGia());
-//                                        sanPhamData.setMota(sanPham.getMota());
-//                                        sanPhamData.setIdloai(sanPham.getIdloai());
-//
-//                                        // Gán đối tượng SanPham vào GioHang
-//                                        gioHang.setSanPham(sanPhamData);
-//                                    }
-//                                    adapter = new GioHangAdapter(getApplicationContext(), gioHangList);
-//                                    recyclerView.setAdapter(adapter);
-//                                }
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Không lấy được dữ liệu giỏ hàng", Toast.LENGTH_SHORT).show();
-//                            }
-//                        },
-//                        throwable -> {
-//                            Log.e("GioHang", "Error fetching data", throwable);
-//                            Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                )
-//        );
     }
 
-//    private void ActionToolBar() {
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//    }
 
     private void ActionToolBar() {
         Chung.ActionToolBar(this, toolbar);
@@ -263,6 +184,7 @@ public class GioHangActivity extends AppCompatActivity {
         tongtien = findViewById(R.id.txttongtiengiohang);
 
         checkBox = findViewById(R.id.checkboxtong);
+        checkBox.setChecked(false);
 
         btnmuahang = findViewById(R.id.btnmuahang);
     }
@@ -271,7 +193,7 @@ public class GioHangActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-            EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
     }
 
@@ -288,8 +210,8 @@ public class GioHangActivity extends AppCompatActivity {
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public  void eventTinhTien(TinhTongEvent event){
-        if(event != null){
+    public void eventTinhTien(TinhTongEvent event) {
+        if (event != null) {
             tinhTongTien();
         }
     }

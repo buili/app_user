@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 
 import com.example.quanly.R;
 import com.example.quanly.activity.MainActivity;
+import com.example.quanly.activity.TaiKhoanActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -25,9 +26,7 @@ public abstract class BottomNavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_navigation);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        if (bottomNavigationView == null) {
-            throw new RuntimeException("BottomNavigationView is null");
-        }
+
         initControl();
 
         FrameLayout frameLayout = findViewById(R.id.frame_container);
@@ -44,6 +43,10 @@ public abstract class BottomNavigationActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.home_bottom) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    return true;
+                }else if(item.getItemId() == R.id.taikhoan_bottom){
+                    Intent intent = new Intent(getApplicationContext(), TaiKhoanActivity.class);
                     startActivity(intent);
                     return true;
                 }

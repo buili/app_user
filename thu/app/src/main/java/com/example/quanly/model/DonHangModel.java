@@ -3,9 +3,9 @@ package com.example.quanly.model;
 import java.util.List;
 
 public class DonHangModel {
-    boolean success;
-    String message;
-    List<DonHang> result;
+    private boolean success;
+    private String message;
+    private List<DonHang> result;
 
     public boolean isSuccess() {
         return success;

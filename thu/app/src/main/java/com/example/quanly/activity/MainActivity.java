@@ -8,10 +8,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -42,6 +44,7 @@ import com.example.quanly.model.User;
 import com.example.quanly.retrofit.ApiBanHang;
 import com.example.quanly.retrofit.RetrofitClient;
 import com.example.quanly.ultil.CheckConnection;
+import com.example.quanly.ultil.Chung;
 import com.example.quanly.ultil.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
@@ -56,10 +59,10 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MainActivity extends BottomNavigationActivity  {
+public class MainActivity extends BottomNavigationActivity {
     Toolbar toolbar;
     RecyclerView recyclerView, recyclerView_bc;
-   // ViewFlipper viewFlipper;
+    // ViewFlipper viewFlipper;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -76,13 +79,16 @@ public class MainActivity extends BottomNavigationActivity  {
 
     ImageSlider imageSlider;
 
+    long backpressTime;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
-        if(Paper.book().read("user") != null){
+        if (Paper.book().read("user") != null) {
             User user = Paper.book().read("user");
             Utils.user_current = user;
         }
@@ -94,6 +100,7 @@ public class MainActivity extends BottomNavigationActivity  {
             GetMenu();
             GetSpMoiNhat();
             CatchOnItemListView();
+            refresh();
         } else {
             CheckConnection.showToast_Short(getApplicationContext(), "Bạn hãy kiểm tra lại kết nối wifi");
             finish();
@@ -108,7 +115,7 @@ public class MainActivity extends BottomNavigationActivity  {
                 .addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        if(!TextUtils.isEmpty(s)){
+                        if (!TextUtils.isEmpty(s)) {
                             compositeDisposable.add(apiBanHang.updateToken(Utils.user_current.getId(), s)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
@@ -130,7 +137,7 @@ public class MainActivity extends BottomNavigationActivity  {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         userModel -> {
-                            if(userModel.isSuccess()){
+                            if (userModel.isSuccess()) {
                                 Utils.ID_RECEIVED = String.valueOf(userModel.getResult().get(0).getId());
                             }
                         },
@@ -152,67 +159,68 @@ public class MainActivity extends BottomNavigationActivity  {
         return R.id.home_bottom;
     }
 
+    //    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//
+//        MenuItem menuItem = menu.findItem(R.id.menugiohang);
+//
+//        View actionView = menuItem.getActionView();
+//
+//        ImageView cartIcon = actionView.findViewById(R.id.cart_icon);
+//        TextView cartBadge = actionView.findViewById(R.id.cart_badge);
+//        updateCartBadge(cartBadge);
+//        actionView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onOptionsItemSelected(menuItem);
+//            }
+//        });
+//        return true;
+//    }
+//
+//    private void updateCartBadge(TextView cartBadge) {
+//        int cartItemCount = getCartItemCount();
+//        if (cartItemCount > 0) {
+//            cartBadge.setText(String.valueOf(cartItemCount));
+//            cartBadge.setVisibility(View.VISIBLE);
+//        } else {
+//            //cartBadge.setVisibility(View.GONE);
+//        }
+//    }
+//
+//    private int getCartItemCount() {
+//        return Utils.manggiohang != null ? Utils.manggiohang.size() : 0;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.menugiohang) {
+//            Intent intent = new Intent(getApplicationContext(), GioHangActivity.class);
+//            startActivity(intent);
+//            return true;
+//        }
+//        if (item.getItemId() == R.id.menutimkiem) {
+//            Intent intent = new Intent(getApplicationContext(), TimKiemActivity.class);
+//            startActivity(intent);
+//            return true;
+//        }
+//        if (item.getItemId() == R.id.image_mess) {
+//            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+//            startActivity(intent);
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-
-        MenuItem menuItem = menu.findItem(R.id.menugiohang);
-        if (menuItem != null) {
-            View actionView = menuItem.getActionView();
-            if (actionView != null) {
-                ImageView cartIcon = actionView.findViewById(R.id.cart_icon);
-                TextView cartBadge = actionView.findViewById(R.id.cart_badge);
-                updateCartBadge(cartBadge);
-
-                // Set up the click listener for the cart icon
-                actionView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onOptionsItemSelected(menuItem);
-                    }
-                });
-            } else {
-                Log.e("MainActivity", "Action view for cart menu item is null");
-            }
-        } else {
-            Log.e("MainActivity", "Menu item menugiohang not found");
-        }
+        Chung.createMenu(this, menu);
         return true;
-    }
-
-    private void updateCartBadge(TextView cartBadge) {
-        int cartItemCount = getCartItemCount(); // Replace with actual cart item count
-        if (cartItemCount > 0) {
-            cartBadge.setText(String.valueOf(cartItemCount));
-            cartBadge.setVisibility(View.VISIBLE);
-        } else {
-            //cartBadge.setVisibility(View.GONE);
-        }
-    }
-
-    private int getCartItemCount() {
-        // Replace with logic to get the actual number of items in the cart
-
-        return Utils.manggiohang != null ? Utils.manggiohang.size() : 0;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menugiohang) {
-            Intent intent = new Intent(getApplicationContext(), GioHangActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        if(item.getItemId() == R.id.menutimkiem){
-            Intent intent = new Intent(getApplicationContext(), TimKiemActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        if (item.getItemId() == R.id.image_mess) {
-            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        Chung.itemMenuSelected(this, item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -243,7 +251,7 @@ public class MainActivity extends BottomNavigationActivity  {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case 2:
-                        if(CheckConnection.haveNetworkConnection(getApplicationContext())){
+                        if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
                             int idloai = mangmenu.get(position).getId();
                             Log.d("MainActivity", "idloai trước khi truyền: " + idloai);
                             Intent intent = new Intent(MainActivity.this, SanPhamActivity.class);
@@ -253,6 +261,10 @@ public class MainActivity extends BottomNavigationActivity  {
                             CheckConnection.showToast_Short(getApplicationContext(), "Bạn hãy kiểm tra lại kết nối mạng");
                         }
                         drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case 6:
+                        Intent chat = new Intent(MainActivity.this, UserActivity.class);
+                        startActivity(chat);
                         break;
                     case 8:
                         Paper.book().delete("user");
@@ -299,6 +311,7 @@ public class MainActivity extends BottomNavigationActivity  {
             }
         });
     }
+
 
     private void ActionViewFlipper() {
         List<SlideModel> imagelist = new ArrayList<>();
@@ -369,10 +382,10 @@ public class MainActivity extends BottomNavigationActivity  {
     }
 
     private void intiView() {
+
         toolbar = findViewById(R.id.toolbarmain);
         recyclerView = findViewById(R.id.recycleviewmain);
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-//        recyclerView.setLayoutManager(layoutManager);
+
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -381,29 +394,27 @@ public class MainActivity extends BottomNavigationActivity  {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView_bc.setLayoutManager(layoutManager2);
 
-       // viewFlipper = findViewById(R.id.viewflipper);
+        // viewFlipper = findViewById(R.id.viewflipper);
         imageSlider = findViewById(R.id.image_slider);
         drawerLayout = findViewById(R.id.drawerlayoutmain);
         navigationView = findViewById(R.id.navigationview);
         listViewMain = findViewById(R.id.listviewmain);
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
         mangmenu = new ArrayList<>();
 
         mangSp = new ArrayList<>();
 
-        if(Utils.manggiohang == null){
+        if (Utils.manggiohang == null) {
             Utils.manggiohang = new ArrayList<>();
-        }else{
-//            int totalItem = 0;
-//            for(int i = 0; i < Utils.manggiohang.size(); i++){
-//                totalItem = totalItem + Utils.manggiohang.get(i).getSoluongsp();
-//            }
+        } else {
             getgiohang();
         }
 
     }
 
-    private void getgiohang(){
+    private void getgiohang() {
         compositeDisposable.add(apiBanHang.giohang(Utils.user_current.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -412,8 +423,7 @@ public class MainActivity extends BottomNavigationActivity  {
 
                             //gioHangAdapter = new GioHangAdapter(getApplicationContext(), gioHangModel.getResult());
                             if (gioHangModel.getResult() == null || gioHangModel.getResult().isEmpty()) {
-                                // Xử lý trường hợp giỏ hàng trống
-                                Utils.manggiohang = new ArrayList<>(); // Khởi tạo danh sách trống
+                                Utils.manggiohang = new ArrayList<>();
                             } else {
                                 Utils.manggiohang = gioHangModel.getResult();
                             }
@@ -426,20 +436,46 @@ public class MainActivity extends BottomNavigationActivity  {
                 )
         );
     }
+
+    private void refresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshData();
+            }
+        });
+    }
+
+    private void refreshData() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GetSpMoiNhat();
+                sanPhamAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        }, 2000);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-//        int totalItem = 0;
-//        if (Utils.manggiohang != null) {
-//            for (int i = 0; i < Utils.manggiohang.size(); i++) {
-//                totalItem += Utils.manggiohang.get(i).getSoluongsp();
-//            }
-//        }
         getgiohang();
         invalidateOptionsMenu();
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (backpressTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+            return;
+        } else {
+            //Toast.makeText(this, "Ấn lần nữa để thoát", Toast.LENGTH_SHORT).show();
+            Chung.showCustomToast(this, "Ấn lần nữa để thoát");
+        }
+        backpressTime = System.currentTimeMillis();
 
-
+    }
 }

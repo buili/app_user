@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.ChatActivity">
+    <EditText
+        android:visibility="gone"
+        android:hint="Đến idusser "
+        android:drawableRight="@drawable/baseline_person_24"
+        android:paddingRight="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/edtiduser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewchat"
         app:layout_constraintTop_toTopOf="parent"

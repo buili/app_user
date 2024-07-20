@@ -47,19 +47,20 @@ public class SanPhamActivity extends BottomNavigationActivity {
 
     Handler handler = new Handler();
     boolean isLoading = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_san_pham);
+        // setContentView(R.layout.activity_san_pham);
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         idloai = getIntent().getIntExtra("idloai", 2);
         Log.d("Laydulieu", "Loi: " + idloai);
         InitView();
-        if(CheckConnection.haveNetworkConnection(getApplicationContext())){
+        if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
             ActionToolBar();
             GetData(page);
             addEventLoad();
-        }else{
+        } else {
             CheckConnection.showToast_Short(getApplicationContext(), "Vui lòng kiểm tra wifi");
             finish();
         }
@@ -77,11 +78,9 @@ public class SanPhamActivity extends BottomNavigationActivity {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(isLoading == false){
-                    if(linearLayoutManager.findLastCompletelyVisibleItemPosition() == mangsp.size() -1){
-                        isLoading = true;
-                        loadMore();
-                    }
+                if (!isLoading && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mangsp.size() - 1) {
+                    isLoading = true;
+                    loadMore();
                 }
             }
         });
@@ -92,18 +91,18 @@ public class SanPhamActivity extends BottomNavigationActivity {
             @Override
             public void run() {
                 mangsp.add(null);
-                sanPhamAdapter.notifyItemInserted(mangsp.size()-1);
+                sanPhamAdapter.notifyItemInserted(mangsp.size() - 1);
             }
         });
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mangsp.remove(mangsp.size()-1);
+                mangsp.remove(mangsp.size() - 1);
                 sanPhamAdapter.notifyItemRemoved(mangsp.size());
                 page = page + 1;
                 GetData(page);
                 sanPhamAdapter.notifyDataSetChanged();
-                isLoading = false;
+                //  isLoading = false;
             }
         }, 2000);
     }
@@ -117,102 +116,59 @@ public class SanPhamActivity extends BottomNavigationActivity {
     protected int getSelectedItemId() {
         return R.id.home_bottom;
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-
-        MenuItem menuItem = menu.findItem(R.id.menugiohang);
-        if (menuItem != null) {
-            View actionView = menuItem.getActionView();
-            if (actionView != null) {
-                ImageView cartIcon = actionView.findViewById(R.id.cart_icon);
-                TextView cartBadge = actionView.findViewById(R.id.cart_badge);
-                updateCartBadge(cartBadge);
-
-                // Set up the click listener for the cart icon
-                actionView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onOptionsItemSelected(menuItem);
-                    }
-                });
-            } else {
-                Log.e("MainActivity", "Action view for cart menu item is null");
-            }
-        } else {
-            Log.e("MainActivity", "Menu item menugiohang not found");
-        }
+        Chung.createMenu(this, menu);
         return true;
-    }
-
-    private void updateCartBadge(TextView cartBadge) {
-        int cartItemCount = getCartItemCount(); // Replace with actual cart item count
-        if (cartItemCount > 0) {
-            cartBadge.setText(String.valueOf(cartItemCount));
-            cartBadge.setVisibility(View.VISIBLE);
-        } else {
-            //cartBadge.setVisibility(View.GONE);
-        }
-    }
-
-    private int getCartItemCount() {
-        // Replace with logic to get the actual number of items in the cart
-
-        return Utils.manggiohang != null ? Utils.manggiohang.size() : 0;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menugiohang) {
-            Intent intent = new Intent(getApplicationContext(), GioHangActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        Chung.itemMenuSelected(this, item);
         return super.onOptionsItemSelected(item);
     }
 
     private void GetData(int page) {
         compositeDisposable.add(apiBanHang.getsp(page, idloai)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        sanPhamModel -> {
-                            if(sanPhamModel.isSuccess()){
-                                if(sanPhamAdapter == null){
-                                    mangsp = sanPhamModel.getResult();
-                                    sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangsp);
-                                    recyclerView.setAdapter(sanPhamAdapter);
-                                }else{
-                                    int vitri = mangsp.size()-1;
-                                    int soluongadd = sanPhamModel.getResult().size();
-                                    for(int i = 0; i < soluongadd; i++){
-                                        mangsp.add(sanPhamModel.getResult().get(i));
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                sanPhamModel -> {
+                                    if (sanPhamModel.isSuccess()) {
+                                        if (sanPhamAdapter == null) {
+                                            mangsp = sanPhamModel.getResult();
+                                            sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangsp);
+                                            recyclerView.setAdapter(sanPhamAdapter);
+                                        } else {
+//                                    int vitri = mangsp.size()-1;
+//                                    int soluongadd = sanPhamModel.getResult().size();
+//                                    for(int i = 0; i < soluongadd; i++){
+//                                        mangsp.add(sanPhamModel.getResult().get(i));
+//                                    }
+                                            int vitri = mangsp.size();
+                                            int soluongadd = sanPhamModel.getResult().size();
+
+                                            // Thêm dữ liệu mới vào danh sách
+                                            mangsp.addAll(sanPhamModel.getResult());
+                                            sanPhamAdapter.notifyItemRangeInserted(vitri, soluongadd);
+                                        }
+                                        isLoading = false;
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Hết dữ liệu", Toast.LENGTH_SHORT).show();
+                                        isLoading = true;
                                     }
-                                    sanPhamAdapter.notifyItemRangeInserted(vitri, soluongadd);
+                                },
+                                throwable -> {
+                                    Log.e("Laydulieu", "Loi", throwable);
+                                    Toast.makeText(getApplicationContext(), "Không lấy được dữ liệu sản phẩm", Toast.LENGTH_SHORT).show();
+                                    isLoading = false;
                                 }
-                            }else{
-                                Toast.makeText(getApplicationContext(), "Hết dữ liệu", Toast.LENGTH_SHORT).show();
-                                isLoading = true;
-                            }
-                        },
-                        throwable -> {
-                            Log.e("Laydulieu", "Loi", throwable);
-                            Toast.makeText(getApplicationContext(), "Không lấy được dữ liệu sản phẩm", Toast.LENGTH_SHORT).show();
-                        }
-                )
+                        )
         );
     }
 
-//    private void ActionToolBar() {
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//    }
 
     private void ActionToolBar() {
         Chung.ActionToolBar(this, toolbar);
@@ -227,7 +183,7 @@ public class SanPhamActivity extends BottomNavigationActivity {
         recyclerView.setHasFixedSize(true);
         mangsp = new ArrayList<>();
 
-        compositeDisposable.add(apiBanHang.giohang(1)
+        compositeDisposable.add(apiBanHang.giohang(Utils.user_current.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -247,5 +203,11 @@ public class SanPhamActivity extends BottomNavigationActivity {
     protected void onResume() {
         super.onResume();
         invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }

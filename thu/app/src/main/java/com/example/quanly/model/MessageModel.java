@@ -1,11 +1,11 @@
 package com.example.quanly.model;
 
 public class MessageModel {
-    boolean success;
-    String message;
-    String name;
+    private boolean success;
+    private String message;
+    private String name;
 
-    int iddonhang;
+    private int iddonhang;
 
     public int getIddonhang() {
         return iddonhang;

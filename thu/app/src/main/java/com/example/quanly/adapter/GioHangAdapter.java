@@ -60,8 +60,23 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         GioHang gioHang = manggiohang.get(position);
+        if(gioHang.getSoluong() > gioHang.getSanPham().getSltonkho()){
+
+            int soLuongMoi = gioHang.getSanPham().getSltonkho();
+            manggiohang.get(position).setSoluong(soLuongMoi);
+
+            holder.giohang_soluong.setText(gioHang.getSoluong() + " ");
+            long gia = gioHang.getSoluong() * gioHang.getSanPham().getGia();
+
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+            holder.giohang_giasp2.setText(decimalFormat.format(gia));
+
+            capNhatGioHang(Utils.user_current.getId(), gioHang.getIdsp(), soLuongMoi);
+        }else{
+            holder.giohang_soluong.setText(gioHang.getSoluong() + " ");
+        }
         holder.giohang_tensp.setText(gioHang.getSanPham().getTen());
-        holder.giohang_soluong.setText(gioHang.getSoluong() + " ");
+
 //        Glide.with(context).load(gioHang.getSanPham().getHinhanh())
 //                .placeholder(R.drawable.noanh)
 //                .error(R.drawable.error)
@@ -143,50 +158,33 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
             }
         });
 
+        if(manggiohang.get(position).getSanPham().getSltonkho() > 0) {
 
-        holder.checkBox.setChecked(isSelectAll);
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    Utils.mangmuahang.add(gioHang);
-                    EventBus.getDefault().postSticky(new TinhTongEvent());
-                }else{
-                    for(int i = 0; i < Utils.mangmuahang.size(); i++){
-                        if(Utils.mangmuahang.get(i).getIdsp() == gioHang.getIdsp()){
-                            Utils.mangmuahang.remove(i);
-                            EventBus.getDefault().postSticky(new TinhTongEvent());
+
+            holder.checkBox.setChecked(isSelectAll);
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        Utils.mangmuahang.add(gioHang);
+                        EventBus.getDefault().postSticky(new TinhTongEvent());
+                    } else {
+                        for (int i = 0; i < Utils.mangmuahang.size(); i++) {
+                            if (Utils.mangmuahang.get(i).getIdsp() == gioHang.getIdsp()) {
+                                Utils.mangmuahang.remove(i);
+                                EventBus.getDefault().postSticky(new TinhTongEvent());
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }else{
+            holder.hethang.setVisibility(View.VISIBLE);
+            holder.checkBox.setVisibility(View.INVISIBLE);
+
+        }
 
 
-
-//        GioHang gioHang = manggiohang.get(position);
-
-//        SanPham sanPham = gioHang.getSanPham();
-//        if (sanPham != null) {
-//            holder.giohang_tensp.setText(sanPham.getTen());
-//            Glide.with(context).load(sanPham.getHinhanh())
-//                    .placeholder(R.drawable.noanh)
-//                    .error(R.drawable.error)
-//                    .into(holder.img_giohang);
-//
-//            DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-//            holder.giohang_giasp.setText(decimalFormat.format(sanPham.getGia()));
-//
-//            long gia = gioHang.getSoluongsp() * sanPham.getGia();
-//            holder.giohang_giasp2.setText(decimalFormat.format(gia));
-//        } else {
-//            holder.giohang_tensp.setText("Sản phẩm không tồn tại");
-//            holder.img_giohang.setImageResource(R.drawable.error);
-//            holder.giohang_giasp.setText("N/A");
-//            holder.giohang_giasp2.setText("N/A");
-//        }
-//
-//        holder.giohang_soluong.setText(String.valueOf(gioHang.getSoluongsp()));
     }
 
     @Override
@@ -196,11 +194,11 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
 
     public void selectAll(boolean selectAll) {
         isSelectAll = selectAll;
-        notifyDataSetChanged(); // Thông báo cho Adapter để cập nhật lại RecyclerView
+        notifyDataSetChanged();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_giohang, imgtru, imgcong;
-        TextView giohang_tensp, giohang_giasp, giohang_soluong, giohang_giasp2;
+        TextView giohang_tensp, giohang_giasp, giohang_soluong, giohang_giasp2, hethang;
         ImageClickListener imageClickListener;
         CheckBox checkBox;
 
@@ -214,6 +212,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
             giohang_soluong = itemView.findViewById(R.id.txtslspgiohang);
             giohang_giasp2 = itemView.findViewById(R.id.txtgiasp2);
             checkBox = itemView.findViewById(R.id.checkbox);
+            hethang = itemView.findViewById(R.id.txthethang);
 
             imgcong.setOnClickListener(this);
             imgtru.setOnClickListener(this);
@@ -241,7 +240,6 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                         themGioHangModel -> {
                             if (themGioHangModel.isSuccess()) {
                                 Toast.makeText(context, "Đã cập nhật giỏ hàng", Toast.LENGTH_SHORT).show();
-                                // Only invalidate if a new product is added
                             }
                         },
                         throwable -> {
@@ -268,3 +266,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         );
     }
 }
+
+
+
+

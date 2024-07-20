@@ -101,6 +101,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+
     private  final EventListener<QuerySnapshot> eventListener = (value, error) -> {
         if (error != null){
             return;

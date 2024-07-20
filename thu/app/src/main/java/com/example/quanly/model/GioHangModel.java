@@ -3,9 +3,9 @@ package com.example.quanly.model;
 import java.util.List;
 
 public class GioHangModel {
-    boolean success;
-    String message;
-    List<GioHang> result;
+    private boolean success;
+    private String message;
+    private List<GioHang> result;
 
     public boolean isSuccess() {
         return success;

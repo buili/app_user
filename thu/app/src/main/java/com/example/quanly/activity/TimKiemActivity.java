@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quanly.R;
@@ -17,6 +18,7 @@ import com.example.quanly.adapter.SanPhamAdapter;
 import com.example.quanly.model.SanPham;
 import com.example.quanly.retrofit.ApiBanHang;
 import com.example.quanly.retrofit.RetrofitClient;
+import com.example.quanly.ultil.Chung;
 import com.example.quanly.ultil.Utils;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class TimKiemActivity extends AppCompatActivity {
     EditText edtTimKiem;
+    TextView textView;
     Toolbar toolbar;
     RecyclerView recyclerView;
     SanPhamAdapter sanPhamAdapter;
@@ -45,14 +48,7 @@ public class TimKiemActivity extends AppCompatActivity {
     }
 
     private void actionToolBar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        Chung.ActionToolBar(this, toolbar);
     }
 
     private void timkiem(String s){
@@ -66,10 +62,15 @@ public class TimKiemActivity extends AppCompatActivity {
                                 mangSanPham = sanPhamModel.getResult();
                                 sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
                                 recyclerView.setAdapter(sanPhamAdapter);
+                                textView.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }else{
                                 mangSanPham.clear();
                                 sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
                                 recyclerView.setAdapter(sanPhamAdapter);
+                                textView.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.INVISIBLE);
+
                             }
 
                         },
@@ -88,6 +89,7 @@ public class TimKiemActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbartimkiem);
         edtTimKiem = findViewById(R.id.edttimkiem);
         recyclerView = findViewById(R.id.recyclerviewtimkiem);
+        textView = findViewById(R.id.txttimkiem);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);

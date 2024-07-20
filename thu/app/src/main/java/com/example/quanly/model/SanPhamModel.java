@@ -3,9 +3,9 @@ package com.example.quanly.model;
 import java.util.List;
 
 public class SanPhamModel {
-    boolean success;
-    String massage;
-    List<SanPham> result;
+    private boolean success;
+    private String massage;
+    private List<SanPham> result;
 
     public boolean isSuccess() {
         return success;
