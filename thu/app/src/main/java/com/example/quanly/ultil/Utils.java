@@ -14,6 +14,7 @@ public class Utils {
 
     public static List<GioHang> mangmuahang = new ArrayList<>();
 
+    public static String tokenSend;
     public static String ID_RECEIVED;
     public static String SENDID = "idsend";
     public static final String RECEIVEDID = "idreceived";

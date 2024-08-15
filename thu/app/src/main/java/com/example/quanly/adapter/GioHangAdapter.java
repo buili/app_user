@@ -100,7 +100,6 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         holder.giohang_giasp2.setText(decimalFormat.format(gia));
 
         holder.setListener(new ImageClickListener() {
-
             @Override
             public void onImageClick(View view, int pos, int giatri) {
                 if (giatri == 1) {
@@ -126,7 +125,6 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                                         xoaspgiohang(Utils.user_current.getId(), manggiohang.get(pos).getIdsp());
                                         Utils.manggiohang.remove(pos);
                                         notifyDataSetChanged();
-
                                         EventBus.getDefault().postSticky(new TinhTongEvent());
                                     }
                                 })
@@ -159,8 +157,6 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         });
 
         if(manggiohang.get(position).getSanPham().getSltonkho() > 0) {
-
-
             holder.checkBox.setChecked(isSelectAll);
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

@@ -17,6 +17,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packagingOptions{
+        exclude("META-INF/DEPENDENCIES")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -86,4 +90,7 @@ dependencies {
 
     //load
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
+
 }

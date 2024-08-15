@@ -16,8 +16,14 @@ import android.widget.Toast;
 
 import com.example.quanly.R;
 import com.example.quanly.model.CreateOrder;
+import com.example.quanly.model.Message;
+import com.example.quanly.model.MessageData;
+import com.example.quanly.model.Notification;
 import com.example.quanly.retrofit.ApiBanHang;
+import com.example.quanly.retrofit.ApiPushNofication;
+import com.example.quanly.retrofit.AuthorizationInterceptor;
 import com.example.quanly.retrofit.RetrofitClient;
+import com.example.quanly.retrofit.RetrofitClientNoti;
 import com.example.quanly.ultil.Utils;
 import com.google.gson.Gson;
 
@@ -28,6 +34,7 @@ import java.text.DecimalFormat;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
@@ -45,6 +52,8 @@ public class ThanhToanActivity extends AppCompatActivity {
     int soluong;
 
     int iddonhang;
+
+    OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +75,16 @@ public class ThanhToanActivity extends AppCompatActivity {
 
     private void countItem() {
         soluong = 0;
-        for(int i = 0; i < Utils.mangmuahang.size(); i++){
+        for (int i = 0; i < Utils.mangmuahang.size(); i++) {
             soluong += Utils.mangmuahang.get(i).getSoluong();
         }
     }
+
     private void initControl() {
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         tongiten = getIntent().getLongExtra("tongtien", 0);
         txttongtien.setText(decimalFormat.format(tongiten));
         edtemail.setText(Utils.user_current.getEmail());
-
 
 
         btndathang.setOnClickListener(new View.OnClickListener() {
@@ -84,13 +93,13 @@ public class ThanhToanActivity extends AppCompatActivity {
                 String str_email = edtemail.getText().toString().trim();
                 String str_sdt = edtsdt.getText().toString().trim();
                 String str_diachi = edtdiachi.getText().toString().trim();
-                if(TextUtils.isEmpty(str_email)){
+                if (TextUtils.isEmpty(str_email)) {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập email", Toast.LENGTH_SHORT).show();
-                }else if(TextUtils.isEmpty(str_sdt)){
+                } else if (TextUtils.isEmpty(str_sdt)) {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập sdt", Toast.LENGTH_SHORT).show();
-                }else if(TextUtils.isEmpty(str_diachi)){
+                } else if (TextUtils.isEmpty(str_diachi)) {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     int iduuser = Utils.user_current.getId();
 
                     Log.d("test", new Gson().toJson(Utils.mangmuahang));
@@ -99,12 +108,12 @@ public class ThanhToanActivity extends AppCompatActivity {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     donHangModel -> {
-                                        if(donHangModel.isSuccess()){
+                                        if (donHangModel.isSuccess()) {
                                             Toast.makeText(getApplicationContext(), "Dặt hàng thành công", Toast.LENGTH_SHORT).show();
-                                            for(int i = 0; i < Utils.mangmuahang.size(); i++){
+                                            for (int i = 0; i < Utils.mangmuahang.size(); i++) {
                                                 xoagiohang(iduuser, Utils.mangmuahang.get(i).getIdsp());
                                             }
-
+                                            pushNotiUser();
                                             Utils.mangmuahang.clear();
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(intent);
@@ -122,50 +131,108 @@ public class ThanhToanActivity extends AppCompatActivity {
             }
         });
 
-        btnthanhtoan.setOnClickListener(new View.OnClickListener(){
+        btnthanhtoan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String str_email = edtemail.getText().toString().trim();
                 String str_sdt = edtsdt.getText().toString().trim();
                 String str_diachi = edtdiachi.getText().toString().trim();
-                if(TextUtils.isEmpty(str_email)){
+                if (TextUtils.isEmpty(str_email)) {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập email", Toast.LENGTH_SHORT).show();
-                }else if(TextUtils.isEmpty(str_sdt)){
+                } else if (TextUtils.isEmpty(str_sdt)) {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập sdt", Toast.LENGTH_SHORT).show();
-                }else if(TextUtils.isEmpty(str_diachi)){
+                } else if (TextUtils.isEmpty(str_diachi)) {
                     Toast.makeText(getApplicationContext(), "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     int iduuser;
                     iduuser = Utils.user_current.getId();
                     Log.d("test", new Gson().toJson(Utils.mangmuahang));
                     compositeDisposable.add(apiBanHang.themdonhang(iduuser, str_sdt, str_email, str_diachi, soluong, tongiten, new Gson().toJson(Utils.mangmuahang))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    messageModel -> {
-                                        if(messageModel.isSuccess()){
-                                           // Toast.makeText(getApplicationContext(), "Dặt hàng thành công", Toast.LENGTH_SHORT).show();
-                                            for(int i = 0; i < Utils.mangmuahang.size(); i++){
-                                                xoagiohang(iduuser, Utils.mangmuahang.get(i).getIdsp());
-                                            }
-
-                                            Utils.mangmuahang.clear();
-                                            iddonhang = messageModel.getIddonhang();
-                                            requestZalo();
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            messageModel -> {
+                                                if (messageModel.isSuccess()) {
+                                                    // Toast.makeText(getApplicationContext(), "Dặt hàng thành công", Toast.LENGTH_SHORT).show();
+                                                    for (int i = 0; i < Utils.mangmuahang.size(); i++) {
+                                                        xoagiohang(iduuser, Utils.mangmuahang.get(i).getIdsp());
+                                                    }
+                                                    pushNotiUser();
+                                                    Utils.mangmuahang.clear();
+                                                    iddonhang = messageModel.getIddonhang();
+                                                    requestZalo();
 //                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 //                                            startActivity(intent);
 //                                            finish();
-                                        }
-                                    },
-                                    throwable -> {
-                                        Toast.makeText(getApplicationContext(), "dat hang loi", Toast.LENGTH_SHORT).show();
-                                    }
-                            )
+                                                }
+                                            },
+                                            throwable -> {
+                                                Toast.makeText(getApplicationContext(), "dat hang loi", Toast.LENGTH_SHORT).show();
+                                            }
+                                    )
                     );
                 }
             }
         });
     }
+
+    private void pushNotiUser() {
+
+        if(Utils.tokenSend != null){
+           client = new OkHttpClient.Builder()
+                    .addInterceptor(new AuthorizationInterceptor(Utils.tokenSend))
+                    .build();
+        }
+        Log.d("Notification", "Starting pushNotiUser method");
+        compositeDisposable.add(apiBanHang.gettoken(1)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                userModel -> {
+                                    Log.d("Notification", "Received user token response");
+                                    if (userModel.isSuccess()) {
+                                        for (int i = 0; i < userModel.getResult().size(); i++) {
+                                            Notification notification = new Notification("Thông báo", "Bạn có đơn hàng mới");
+                                            //  Message message = new Message(userModel.getResult().get(i).getToken(), notification);
+                                            Message message = new Message(userModel.getResult().get(i).getToken(),
+                                                    notification);
+                                            Log.d("Notification", "Token: " + userModel.getResult().get(i).getToken());
+                                            MessageData messageData = new MessageData(message);
+                                            Gson gson = new Gson();
+                                            String json = gson.toJson(messageData);
+                                            Log.d("Notification JSON", json);
+                                            ApiPushNofication apiPushNofication = RetrofitClientNoti.getInstance(client).create(ApiPushNofication.class);
+                                            compositeDisposable.add(apiPushNofication.sendNofitication(messageData)
+                                                            .subscribeOn(Schedulers.io())
+                                                            .observeOn(AndroidSchedulers.mainThread())
+                                                            .subscribe(
+                                                                    notiResponse -> {
+                                                                        if (notiResponse.getName().isEmpty()) {
+                                                                            Log.d("Notification", "Thành công");
+                                                                        } else {
+                                                                            Log.d("Notification", "Lỗi");
+                                                                        }
+                                                                        Log.d("Notification", "không viết");
+//                                                        Log.d("Notification", "Success: " + notiResponse.getSuccess());
+//                                                        Log.d("Notification", "Failure: " + notiResponse.getFailure());
+                                                                    },
+                                                                    throwable -> {
+                                                                        Log.d("Notification Error", "Error sending notification: " + throwable.getMessage());
+                                                                        throwable.printStackTrace();
+                                                                    }
+                                                            )
+                                            );
+                                        }
+                                    }
+                                },
+                                throwable -> {
+                                    Log.d("Notification Error2", "Error receiving token: " + throwable.getMessage());
+                                }
+                        )
+        );
+    }
+
+
 
     private void requestZalo() {
         CreateOrder orderApi = new CreateOrder();
@@ -178,8 +245,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                 String token = data.getString("zp_trans_token");
 
 
-
-                ZaloPaySDK.getInstance().payOrder(ThanhToanActivity.this, token, "demozpdk://app", new PayOrderListener(){
+                ZaloPaySDK.getInstance().payOrder(ThanhToanActivity.this, token, "demozpdk://app", new PayOrderListener() {
 
                     @Override
                     public void onPaymentSucceeded(String s, String s1, String s2) {
@@ -218,7 +284,7 @@ public class ThanhToanActivity extends AppCompatActivity {
         }
     }
 
-    private void xoagiohang(int idUser, int idSp){
+    private void xoagiohang(int idUser, int idSp) {
         compositeDisposable.add(apiBanHang.xoaspgiohang(idUser, idSp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -70,6 +70,8 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.It
                 }
             }
         });
+
+        
     }
 
     @Override

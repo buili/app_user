@@ -40,6 +40,9 @@ public class TienIchAdapter extends ArrayAdapter<TienIch> {
         ImageView imageView = convertView.findViewById(R.id.img_tienich);
         txt_ten.setText(tienIch.getTen());
         imageView.setImageResource(tienIch.getImageView());
+
+
+
         return convertView;
     }
 }

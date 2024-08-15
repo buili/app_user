@@ -1,26 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarmain"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/toolbar"
-        app:title="Trang Chính"/>
+        app:title="Trang Chính" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerlayoutmain"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawerlayoutmain"
+        <!-- Nội dung chính được bao bọc bởi SwipeRefreshLayout -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -33,7 +34,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-
+                    <!-- CardView với ImageSlider -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
@@ -52,6 +53,7 @@
 
                     </androidx.cardview.widget.CardView>
 
+                    <!-- Nội dung sản phẩm -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,28 +99,25 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recycleviewmain"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        </androidx.recyclerview.widget.RecyclerView>
+                            android:layout_height="match_parent" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/navigationview"
+        <!-- NavigationView nằm trong DrawerLayout -->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start">
+
+            <ListView
+                android:id="@+id/listviewmain"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start">
-
-                <ListView
-                    android:id="@+id/listviewmain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.navigation.NavigationView>
-
-        </androidx.drawerlayout.widget.DrawerLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+                android:layout_height="wrap_content" />
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
 
 

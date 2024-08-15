@@ -43,6 +43,7 @@ import com.example.quanly.model.SanPham;
 import com.example.quanly.model.User;
 import com.example.quanly.retrofit.ApiBanHang;
 import com.example.quanly.retrofit.RetrofitClient;
+import com.example.quanly.ultil.AccessToken;
 import com.example.quanly.ultil.CheckConnection;
 import com.example.quanly.ultil.Chung;
 import com.example.quanly.ultil.Utils;
@@ -53,6 +54,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.paperdb.Paper;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -92,6 +95,8 @@ public class MainActivity extends BottomNavigationActivity {
             User user = Paper.book().read("user");
             Utils.user_current = user;
         }
+
+        initAccessToken();
         getToken();
         intiView();
         if (CheckConnection.haveNetworkConnection(getApplicationContext())) {
@@ -107,6 +112,7 @@ public class MainActivity extends BottomNavigationActivity {
         }
 
     }
+
 
 
 
@@ -456,6 +462,29 @@ public class MainActivity extends BottomNavigationActivity {
 
             }
         }, 2000);
+    }
+
+    private void initAccessToken() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                AccessToken accessToken = new AccessToken();
+                String token = accessToken.getAccessToken();
+                if (token == null) {
+                    Log.e("initAccessToken", "Failed to retrieve access token. Token is null.");
+                } else {
+                    Log.d("initAccessToken", "Access token retrieved successfully: " + token);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("token", token != null ? token : "Token is null");
+                        Utils.tokenSend = token;
+                    }
+                });
+            }
+        });
     }
 
     @Override
